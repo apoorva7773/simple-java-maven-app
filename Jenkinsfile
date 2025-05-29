@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven_3.9.9'  // Use the name you configured in Jenkins Global Tool Config
+        maven 'Maven3'  // Use the Maven version configured in Jenkins
     }
 
     stages {
@@ -24,10 +24,16 @@ pipeline {
             }
         }
 
-        stage('Archive Artifacts') {
+        stage('Report') {
             steps {
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                junit 'target/surefire-reports/*.xml'
             }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
         }
     }
 }
